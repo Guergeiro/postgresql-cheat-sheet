@@ -1,10 +1,44 @@
 ## Table of Contents
+- [Data Types](#data-types)
+- [Control Structures](#control-structures)
 - [Procedures](#procedures)
 - [Functions](#functions)
 - [Triggers](#triggers)
 - [Views](#views)
 - [Sequences](#sequences)
 - [Transactions](#transactions)
+- [Cursors](#cursors)
+
+## Data Types
+### Boolean
+- `true` or `false`
+
+### Numeric
+- `SMALLINT(n)`
+- `INTEGER(n)`
+- `FLOAT(n)`
+
+### Date
+- `DATE`
+- `TIME`
+- `TIMESTAMP`
+
+## Control Structures
+```sql
+IF [CONDITION] THEN
+    -- Logic
+ELSIF [CONDITION] THEN
+    -- Logic
+END IF;
+```
+```sql
+CASE
+    WHEN [CONDITION] THEN
+        -- Logic Here
+    WHEN [CONDITION] THEN
+        -- Logic Here
+END;
+```
 
 ## Procedures
 ```sql
@@ -85,7 +119,8 @@ CREATE OR REPLACE VIEW viewName
 AS
 SELECT [*|columns]
 FROM tableName
-WHERE [condition];
+WHERE [condition]
+[WITH CHECK OPTION];
 
 SELECT * FROM viewName;
 ```
@@ -124,4 +159,26 @@ VALUES (nextval(('sequenceName')), ...);
 BEGIN TRANSACTION
     -- Do Logic Here
 [COMMIT|ROLLBACK];
+```
+
+## Cursors
+```sql
+CREATE OR REPLACE PROCEDURE procedureName() 
+LANGUAGE plpgsql
+AS $procedureName$
+DECLARE
+    recordName RECORD;
+    cursorName CURSOR()
+        FOR SELECT * FROM tableName;
+BEGIN
+    LOOP
+        FETCH cursorName INTO recordName;
+        EXIT WHEN NOT FOUND;
+            -- Do Logic Here
+            -- use recordName.column
+    END LOOP;
+    
+    CLOSE cursorName;
+END
+$procedureName$;
 ```
